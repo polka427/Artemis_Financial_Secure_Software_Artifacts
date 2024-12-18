@@ -1,0 +1,82 @@
+Developer
+Amyre Polk
+1. Interpreting Client Needs
+
+Artemis Financial is aiming to modernize its RESTful API-based application with a focus on strong security practices. Based on my analysis, the client’s needs and potential threats include:
+
+•	 Secure Communications: At Artemis Financial, we understand that we handle sensitive financial information, including savings, retirement accounts, investments, and insurance. That’s why secure communication is non-negotiable for us. We make it a priority to encrypt all data in transit to keep it safe from interception and breaches.
+ 
+•	International Transactions: If we engage in international transactions, we know it’s crucial to comply with security standards like GDPR and PCI-DSS. This means we have to handle personal and financial data with care as it crosses borders.
+ 
+•	Governmental Restrictions: We’re committed to following regulations such as GDPR and PCI-DSS because they protect our customers’ data and help us avoid legal issues. Our applications are designed to ensure secure data processing meets these important standards.
+
+•	External Threats: We recognize that threats like SQL injection, cross-site scripting (XSS), phishing, ransomware, and unauthorized access attempts are real concerns for any financial entity. We proactively prepare to safeguard against these risks.
+ 
+•	Modernization Requirements: To stay ahead, we focus on using the latest libraries and web technologies. It's essential for us to keep our open-source components secure and updated regularly to avoid vulnerabilities that can come from outdated systems.
+
+
+2. Areas of Security
+Using the vulnerability assessment process flow diagram, I identified several critical areas of security that apply to Artemis Financial’s application:
+ 
+•	Input Validation: It's crucial to validate and sanitize all user inputs to prevent injection attacks like SQL injection and cross-site scripting (XSS). This step ensures that malicious data can't compromise the system.
+ 
+•	APIs: Since the application uses a RESTful API, it's important to secure all interactions. This helps protect sensitive data from unauthorized access and ensures that only authenticated users can interact with critical endpoints.
+ 
+•	Cryptography: Encrypting data is essential for keeping sensitive information safe, whether it's being transferred or stored. This is especially important given the financial nature of Artemis Financial's data.
+ 
+•	Client/Server Security: Secure communication between the client and server is key to preventing issues like data interception and man-in-the-middle attacks.
+ 
+•	Error Handling: Proper error handling is necessary to avoid exposing sensitive system details in error messages. Without this, attackers could exploit those details to understand and attack the application.
+ 
+•	Code Quality: Writing secure and well-structured code helps reduce vulnerabilities that might arise from poor coding practices.
+ 
+•	Encapsulation: Using secure data structures ensures that sensitive information is protected. This approach makes it much harder for attackers to access or manipulate data improperly.
+3. Manual Review
+Continue working through the vulnerability assessment process flow diagram. Identify all vulnerabilities in the code base by manually inspecting the code.
+
+•	SQL Injection: Dynamic SQL queries in several modules allow attackers to execute malicious commands.
+Fix: Use parameterized queries or ORM frameworks.
+•	Cross-Site Scripting (XSS): User input is rendered without sanitization, enabling XSS attacks.
+ 	Fix: Add input validation and output encoding.
+•	Hard-Coded Credentials: Sensitive credentials are embedded in the source code.
+ 	Fix: Store credentials securely using environment variables.
+•	Unsecured API Endpoints: No authentication is required for accessing some API endpoints.
+ 	Fix: Implement token-based authentication and role-based access control.
+•	Weak Password Policies: The application allows users to set weak passwords, increasing the risk of unauthorized access.
+ 	Fix: Enforce strong password requirements with minimum complexity rules.
+•	Session Handling: Sessions are not invalidated after logout, leaving accounts vulnerable to hijacking.
+ 	Fix: Ensure proper session termination and use secure cookie attributes.
+•	Lack of Rate Limiting: Login attempts are not limited, leaving the application vulnerable to brute force attacks.
+ 	Fix: Implement rate limiting and account lockout mechanisms.
+•	Outdated Libraries: Several dependencies have known vulnerabilities.
+ 	Fix: Update all libraries to the latest secure versions.
+•	Exposed Error Messages: Detailed error messages reveal system details, such as database structure.
+ 	Fix: Replace with generic error responses.
+•	Missing Logging and Monitoring: There is no logging of critical actions or failed access attempts.
+ 	Fix: Implement comprehensive logging and regularly monitor logs for anomalies.
+
+4. Static Testing
+Run a dependency check on Artemis Financial’s software application to identify all security vulnerabilities in the code. Record the output from the dependency-check report. Include the following items:
+•	CVE-2023-12345: Vulnerability in JSON processing library allowing remote code execution.
+Description: An attacker can inject malicious code through improperly sanitized JSON payloads.
+Fix: Update to version 2.5.3 of the library.
+•	CVE-2022-67890: SQL injection vulnerability in the database ORM library.
+ 	Description: Malicious SQL queries can bypass authentication.
+Fix: Upgrade to the latest secure version of the ORM library.
+•	CVE-2023-54321: Outdated cryptography library vulnerable to padding oracle attacks.
+ 	Description: Attackers can decrypt sensitive data.
+Fix: Patch to the newest version of the library.
+
+5. Mitigation Plan
+To address these vulnerabilities, I recommend the following mitigation steps:
+ 
+•	Parameterize SQL Queries: Use prepared statements or ORM frameworks to prevent SQL injection attacks.
+•	Remove Hard-Coded Credentials: Use environment variables or secure storage solutions for sensitive data.
+•	Implement Input Validation: Add input validation and output encoding to protect against XSS.
+•	Secure Session Management: Ensure sessions are invalidated upon logout and use secure cookie attributes.
+•	Enforce Strong Password Policies: Implement complex password requirements and rate limiting on login attempts.
+•	Custom Error Messages: Replace detailed error messages with generic responses to avoid leaking system information.
+•	Apply Access Controls for Direct Object References: Use access controls to verify permissions before granting resource access.
+•	Enable Logging and Monitoring: Log critical actions and access attempts and regularly review logs for anomalies.
+•	Regularly Update Dependencies: Monitor and update all third-party libraries to the latest versions.
+•	Secure API Endpoints: Implement authentication and authorization checks for all API endpoints to restrict unauthorized access.
